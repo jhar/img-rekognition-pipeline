@@ -25,3 +25,11 @@ Bulk:
 `aws dynamodb scan --table-name <dynamodb_table_name>`
 
 I'm sure you can write a query yourself if you have more data in your table already.
+
+### Just for laughs
+
+Detect celebrities on the `hypothetical_misanthropes.jpg` image in this repo pinged Giulio Cali (80% confidence, but 91% confident that he's calm):
+
+<img src="images/hypothetical_misanthropes.jpg" alt="Doodle of hypothetical misanthropes" width="542">
+
+![Italian actor Giulio Calì in a scene of the film Campo de' fiori](https://upload.wikimedia.org/wikipedia/commons/f/f5/Giulio_Cal%C3%AC_Campo_de_fiori.png)
