@@ -2,6 +2,8 @@
 
 import boto3
 import os
+import json
+from decimal import Decimal
 
 MIN_CONFIDENCE = 60
 
@@ -39,14 +41,16 @@ def process_image(bucket, key):
     imageDataTable = os.environ.get("TABLE")
     table = dynamodb.Table(imageDataTable)
 
+    item = {
+        "Image": key,
+        "Labels": labels_response.get("Labels", []),
+        "Faces": faces_response.get("FaceDetails", []),
+        "Texts": text_response.get("TextDetections", []),
+        "Celebrities": celebrities_response.get("CelebrityFaces", [])
+    }
+
     table.put_item(
-        Item = {
-            "Image": key,
-            "Labels": labels_response.get("Labels", []),
-            "Faces": faces_response.get("FaceDetails", []),
-            "Texts": text_response.get("TextDetections", []),
-            "Celebrities": celebrities_response.get("CelebrityFaces", [])
-        }
+        Item = json.loads(json.dumps(item), parse_float=Decimal)
     )
 
     print("Image processing complete.")
