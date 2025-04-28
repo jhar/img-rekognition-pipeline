@@ -72,10 +72,7 @@ resource "aws_iam_policy" "this" {
         Resource = "*"
       },
       {
-        Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-        ],
+        Action   = ["s3:GetObject"],
         Effect   = "Allow"
         Resource = ["${aws_s3_bucket.this.arn}/*"]
       },
@@ -88,9 +85,6 @@ resource "aws_iam_policy" "this" {
         Action = [
           "dynamodb:PutItem",
           "dynamodb:UpdateItem",
-          "dynamodb:GetItem",
-          "dynamodb:Query",
-          "dynamodb:Scan"
         ],
         Effect   = "Allow"
         Resource = ["${aws_dynamodb_table.this.arn}"]
