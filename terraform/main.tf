@@ -21,7 +21,8 @@ locals {
 
 # Bucket for storing images
 resource "aws_s3_bucket" "this" {
-  bucket = "${local.prefix}-bucket"
+  bucket        = "${local.prefix}-bucket"
+  force_destroy = true
 }
 
 # DynamoDB table for storing image attributes
@@ -82,7 +83,7 @@ resource "aws_iam_policy" "this" {
         Resource = ["${aws_s3_bucket.this.arn}"]
       },
       {
-        Action = ["dynamodb:PutItem"],
+        Action   = ["dynamodb:PutItem"],
         Effect   = "Allow"
         Resource = ["${aws_dynamodb_table.this.arn}"]
       }
