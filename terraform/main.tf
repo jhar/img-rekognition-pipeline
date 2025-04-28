@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "this" {
   bucket = "${local.prefix}-bucket"
 }
 
-# DynamoDB table for storing image labels
+# DynamoDB table for storing image attributes
 resource "aws_dynamodb_table" "this" {
   name         = "${local.prefix}-table"
   billing_mode = "PAY_PER_REQUEST"
@@ -82,10 +82,7 @@ resource "aws_iam_policy" "this" {
         Resource = ["${aws_s3_bucket.this.arn}"]
       },
       {
-        Action = [
-          "dynamodb:PutItem",
-          "dynamodb:UpdateItem",
-        ],
+        Action = ["dynamodb:PutItem"],
         Effect   = "Allow"
         Resource = ["${aws_dynamodb_table.this.arn}"]
       }
