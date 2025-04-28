@@ -21,12 +21,12 @@ locals {
 
 # Bucket for storing images
 resource "aws_s3_bucket" "this" {
-  bucket = "${local.prefix}-image-bucket"
+  bucket = "${local.prefix}-bucket"
 }
 
 # DynamoDB table for storing image labels
 resource "aws_dynamodb_table" "this" {
-  name         = "rekognition-image-labels-table"
+  name         = "${local.prefix}-table"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "Image"
 
@@ -38,7 +38,7 @@ resource "aws_dynamodb_table" "this" {
 
 # AWS Lambda function
 resource "aws_iam_role" "this" {
-  name = "rekognition-lambdarole"
+  name = "${local.prefix}-lambdarole"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -55,7 +55,7 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_policy" "this" {
-  name        = "${local.prefix}-lambda-access-policy"
+  name        = "${local.prefix}-policy"
   description = "Policy for Lambda to access rekognition, s3, and dynamodb"
 
   policy = jsonencode({
@@ -113,7 +113,7 @@ data "archive_file" "this" {
 resource "aws_lambda_function" "this" {
   filename         = "../lambda_function_payload.zip"
   source_code_hash = data.archive_file.this.output_base64sha256
-  function_name    = "rekognition-lambda-function"
+  function_name    = "${local.prefix}-lambda"
   handler          = "index.handler"
   role             = aws_iam_role.this.arn
   runtime          = "python3.11"
